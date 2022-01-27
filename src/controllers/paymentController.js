@@ -75,26 +75,26 @@ class paymentControler{
         const xmlresp = response.body;
         const { headers, body, statusCode } = response;
         // console.log(statusCode)
-        // console.log(body)
-        if (res.status(statusCode)!== 200) {
-          // res.header("Content-Type", "application/xml");
-          // return res.status(statusCode).send(xmlresp);
-          return res.status(statusCode).json({
-            status: statusCode,
-            message: "Successfully Payment",
-            data: {
-              user: user.user,
-              Token,
-            },
-          });
-        } else {
-          return res
-            .status(statusCode)
-            .json({
-              status: statusCode,
-              message: "Payament faild ",
-            });
-        }
+        console.log(body)
+        // if (res.status(statusCode)== 200) {
+        //   // res.header("Content-Type", "application/xml");
+        //   // return res.status(statusCode).send(xmlresp);
+        //   return res.status(statusCode).json({
+        //     status: statusCode,
+        //     message: "Successfully Payment",
+        //     data: {
+        //       user: user.user,
+        //       Token,
+        //     },
+        //   });
+        // } else {
+        //   return res
+        //     .status(statusCode)
+        //     .json({
+        //       status: statusCode,
+        //       message: "Payament faild ",
+        //     });
+        // }
 
       } catch (error) {
         return res.status(500).json({
