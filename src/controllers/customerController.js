@@ -1,34 +1,37 @@
 
-const https = require('http');
-import request from "request";
- 
-const url = 'http://52.36.87.202/services/cbhi/citizenNidValidation.php?citizenNidNumber=1194880028990147&cbhiCollectionYear=2021';
+import axios from "axios";
+import { decode } from "../helpers/jwtTokenizer";
 
+async function customerApi(req, res) {
+  try {
+    //const { citizenNidNumber, cbhiCollectionYear } = req.query;
+    const { citizenNidNumber, cbhiCollectionYear } = req.body;
+    const url = `http://52.36.87.202/services/cbhi/citizenNidValidation.php?citizenNidNumber=${citizenNidNumber}&cbhiCollectionYear=${cbhiCollectionYear}`;
 
-
-function customerApi(req,res, callback) {
-    try {
-        request({ url: url, json:true}, (error, response)=>{
-            if(error){
-                return response.error
+    const response = await axios.post(url);
+    const data = response.data;
+    const Token = req.headers["token"];
+       const payload = await decode(Token);
+          const { username } = payload;
+         
+            if (response.data.responseCode == 200) {
+              //res.status(200).send(data);
+              res.status(200).send({
+                data,
+                Token
+              })
+            } else {
+              res.status(response.data.responseCode).send(data);
             }
-            // callback();
-            var data=response.body
-          
-            res.status(200).json({
-                data:data
-            });
-            console.log(data)
-        })
-        
-    } catch (error) {
-        res.status(500).json({
-          status:500,
-          error: "Sever error " 
-        });
-    }
+         
    
-    
-    
+
+    // or
+    // res.status(response.data.responseCode).send({
+    //     data
+    // });
+  } catch (error) {
+    return res.status(500).json({ status: 500, error: "Sever error "+error.message });
   }
-  module.exports=customerApi;
+}
+module.exports = customerApi;

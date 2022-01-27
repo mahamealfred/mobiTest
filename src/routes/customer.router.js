@@ -1,10 +1,11 @@
 import {  Router }  from "express";
-import callExternalApiUsingHttp from '../controllers/customerController';
+import customerApi from '../controllers/customerController';
+import isLogin from "../middleware/isLogin";
 import customerValidation from "../middleware/validateCustomer";
 const route=Router();
 
 
-route.post('/',customerValidation,callExternalApiUsingHttp)
+route.post('/',isLogin, customerValidation, customerApi)
 
 
 export default route;
