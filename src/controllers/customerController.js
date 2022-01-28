@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { decode } from "../helpers/jwtTokenizer";
 
@@ -11,27 +10,27 @@ async function customerApi(req, res) {
     const response = await axios.post(url);
     const data = response.data;
     const Token = req.headers["token"];
-       const payload = await decode(Token);
-          const { username } = payload;
-         
-            if (response.data.responseCode == 200) {
-              //res.status(200).send(data);
-              res.status(200).send({
-                data,
-                Token
-              })
-            } else {
-              res.status(response.data.responseCode).send(data);
-            }
-         
-   
+    const payload = await decode(Token);
+    const { username } = payload;
+
+    if (response.data.responseCode == 200) {
+      //res.status(200).send(data);
+      res.status(200).send({
+        data,
+        Token,
+      });
+    } else {
+      res.status(response.data.responseCode).send(data);
+    }
 
     // or
     // res.status(response.data.responseCode).send({
     //     data
     // });
   } catch (error) {
-    return res.status(500).json({ status: 500, error: "Sever error "+error.message });
+    return res
+      .status(500)
+      .json({ status: 500, error: "Sever error " + error.message });
   }
 }
 module.exports = customerApi;

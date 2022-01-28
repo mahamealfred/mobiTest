@@ -1,6 +1,7 @@
 const soapRequest = require('easy-soap-request');
 import mcashReference from '../helpers/mcashReferenceCode';
 import {  decode } from "../helpers/jwtTokenizer";
+const xml2js =require('xml2js');
 
 // Example data
 const url = 'http://tests.mcash.rw/rwandatest/services/payment?wsdl';
@@ -19,7 +20,7 @@ class paymentControler{
           fromMemberPrincipalType:'USER',
           fromMember:user.user,
           toMemeberPrincipalType:'USER',
-          toMember:'2000011_15',
+          toMember:'20000011_15',
           amount: req.body.amount,
           description:'Test Spring RSSB paymentSandBox',
           transferType: 134,
@@ -65,7 +66,6 @@ class paymentControler{
           </pay:doPayment>
           </soapenv:Body>
          </soapenv:Envelope>`
-       
 
          const { response } = await soapRequest({
           url: url,
@@ -75,26 +75,43 @@ class paymentControler{
         const xmlresp = response.body;
         const { headers, body, statusCode } = response;
         // console.log(statusCode)
-        console.log(body)
-        // if (res.status(statusCode)== 200) {
-        //   // res.header("Content-Type", "application/xml");
-        //   // return res.status(statusCode).send(xmlresp);
-        //   return res.status(statusCode).json({
-        //     status: statusCode,
-        //     message: "Successfully Payment",
-        //     data: {
-        //       user: user.user,
-        //       Token,
-        //     },
-        //   });
-        // } else {
-        //   return res
-        //     .status(statusCode)
-        //     .json({
-        //       status: statusCode,
-        //       message: "Payament faild ",
-        //     });
-        // }
+       // console.log(body)
+
+        xml2js.parseString(body,async (err, result) => {
+          if(err) {
+              throw err;
+          }
+         const jsonString = JSON.stringify(result , null , 2);
+          const jsonParser = JSON.parse(jsonString);
+          //TO_NOT_FOUND
+          //INVALID_PARAMETERS
+          //console.log(jsonParser['soap:Envelope']['soap:Body'][0]['ns2:doPaymentResponse'][0].return[0]['status'][0])
+          const checkResult=jsonParser['soap:Envelope']['soap:Body'][0]['ns2:doPaymentResponse'][0].return[0]['status'][0];
+          if(checkResult=='PROCESSED'){
+            // res.header("Content-Type", "application/xml");
+          // return res.status(statusCode).send(xmlresp);
+          return res.status(200).json({
+            status: 200,
+            message: "Successfully Payment",
+            data: {
+              user: user.user,
+              Token,
+            },
+          });
+          }
+          else if(checkResult=='INVALID_PARAMETERS'){
+            return res.status(403).json({
+              status: 403,
+              message: "Invalid Parameters ",
+            });
+          }
+          else{
+            return res.status(404).json({
+              status: 404,
+              message: "To Not Found",
+            }); 
+          }
+        });
 
       } catch (error) {
         return res.status(500).json({
