@@ -1,7 +1,7 @@
 
 
 const mcashReference = ()=>{
-    const numbers = Math.floor(Math.random() * 9000000000) + 1000000000;
+    const numbers = Math.floor(Math.random() * 900000000000) + 100000000000;
     return `${numbers}`
 }
 
