@@ -108,6 +108,7 @@ class paymentControler{
           const McashReference=jsonParser['soap:Envelope']['soap:Body'][0]['ns2:doPaymentResponse'][0].return[0]['transfer'][0]['fields'][0]['value'][0]
           const HousholderId=jsonParser['soap:Envelope']['soap:Body'][0]['ns2:doPaymentResponse'][0].return[0]['transfer'][0]['fields'][1]['value'][0]
           const payerName=jsonParser['soap:Envelope']['soap:Body'][0]['ns2:doPaymentResponse'][0].return[0]['transfer'][0]['fields'][2]['value'][0]
+          const fiscalYear=jsonParser['soap:Envelope']['soap:Body'][0]['ns2:doPaymentResponse'][0].return[0]['transfer'][0]['fields'][3]['value'][0]
           console.log("amaountPaid:", amauntPaid)
           console.log('payament date:', payamentDate)
           console.log("description:", description)
@@ -115,6 +116,7 @@ class paymentControler{
           console.log("Mcash Reference:",  McashReference)
           console.log("House holderId:", HousholderId)
           console.log("Payer Name:", payerName)
+          console.log("Fiscal Year:", fiscalYear)
 
           const responseData={
             amauntPaid,
@@ -123,7 +125,8 @@ class paymentControler{
             agentName,
             McashReference,
             HousholderId,
-            payerName
+            payerName,
+            fiscalYear
           }
 
           if(checkResult=='PROCESSED'){
