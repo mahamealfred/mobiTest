@@ -16,8 +16,7 @@ async function customerApi(req, res) {
     if (response.data.responseCode == 200) {
       //res.status(200).send(data);
       res.status(200).send({
-        data
-      
+        data,
       });
     } else {
       res.status(response.data.responseCode).send(data);

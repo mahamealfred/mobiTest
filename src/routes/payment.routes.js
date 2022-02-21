@@ -6,7 +6,7 @@ import paymentValidation from "../middleware/ValidatePayment";
 const route=Router();
 
 
-route.post('/',paymentValidation, isLogin,verifyToken,  paymentControler.payement)
+route.post('/',paymentValidation,verifyToken,  paymentControler.payement)
 
 
 export default route;

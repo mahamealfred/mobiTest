@@ -1,19 +1,18 @@
 import { decode } from "../helpers/jwtTokenizer";
 
-
-const isLogin = async (req, res,next) => {
+const isLogin = async (req, res, next) => {
   const Token = req.headers["token"];
-  if (!Token) {
-  
+
+  if (Token == null) {
     return res.status(401).json({
       status: 401,
-      message: "Please login",
+      message: "Please not authorize login",
     });
   }
-  const payload = await decode(Token);
-  const { username } = payload;
-   req.user=username;
+    const payload = await decode(Token);
+    const { username } = payload;
+    req.user = username;
     return next();
-};
+  }
 
 export default isLogin;

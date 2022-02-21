@@ -6,7 +6,7 @@ import verifyToken from "../middleware/verifyToken";
 const route=Router();
 
 
-route.post('/', isLogin,verifyToken, customerValidation, customerApi)
+route.post('/',verifyToken, customerValidation, customerApi)
 
 
 export default route;

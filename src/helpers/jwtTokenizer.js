@@ -9,7 +9,7 @@ export const encode = (claims)=>{
     return token;
 };
 
-export const decode=(token)=>{
+export const decode=( token)=>{
     const payload=jwt.verify(token,process.env.JWT_SECRET)
     return payload;
 }
